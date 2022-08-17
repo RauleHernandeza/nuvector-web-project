@@ -1,0 +1,1 @@
+console.log("mostrar este mensaje en consola")
