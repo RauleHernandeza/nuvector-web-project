@@ -14,16 +14,7 @@ const PORT = process.env.PORT || 3000
 
 app.get('/',function(req,res){
     console.log("hola")
-    let info=req.body;
-    console.log(info)
-    res.sendStatus({status:200, body:info});
-})
-
-app.post('/',function(req,res){
-    console.log("hola")
-    let info=req.body;
-    console.log(info)
-    res.sendStatus({status:200, body:info});
+    res.sendStatus(200);
 })
 
 app.listen(PORT, ()=> {
