@@ -5,7 +5,8 @@ const getusers = async (req, res) => {
     const info = req.body
     login(info).then(resp=>{
         console.log(resp)
-        res.redirect('https://nuvector-web-project-front.herokuapp.com/board.html')
+        //res.redirect('/home/raul/Escritorio/Node/nuvector_web_project/src/views/board.html')
+        res.redirect('https://www.youtube.com/')
     })
 
 
