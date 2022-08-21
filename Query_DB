@@ -1,0 +1,253 @@
+CREATE SEQUENCE public.categories_id_categories_seq;
+
+CREATE TABLE public.Categories (
+                ID_Categories SERIAL NOT NULL,
+                Name_categories VARCHAR NOT NULL,
+                Description VARCHAR NOT NULL,
+                CONSTRAINT id_categories PRIMARY KEY (ID_Categories)
+);
+
+
+ALTER SEQUENCE public.categories_id_categories_seq OWNED BY public.Categories.ID_Categories;
+
+CREATE SEQUENCE public.products_id_products_seq;
+
+CREATE TABLE public.Products (
+                ID_Products SERIAL NOT NULL,
+                Name_products VARCHAR NOT NULL,
+                Description VARCHAR NOT NULL,
+                CONSTRAINT id_products PRIMARY KEY (ID_Products)
+);
+
+
+ALTER SEQUENCE public.products_id_products_seq OWNED BY public.Products.ID_Products;
+
+CREATE SEQUENCE public.customers_id_customers_seq;
+
+CREATE TABLE public.Customers (
+                ID_Customers SERIAL NOT NULL,
+                Identity_card BIGINT NOT NULL,
+                Name VARCHAR NOT NULL,
+                Surname VARCHAR NOT NULL,
+                City VARCHAR NOT NULL,
+                State VARCHAR NOT NULL,
+                Country VARCHAR NOT NULL,
+                SIC SMALLINT NOT NULL,
+                Operating BOOLEAN NOT NULL,
+                CONSTRAINT id_customers PRIMARY KEY (ID_Customers)
+);
+
+
+ALTER SEQUENCE public.customers_id_customers_seq OWNED BY public.Customers.ID_Customers;
+
+CREATE SEQUENCE public.projects_id_projects_seq;
+
+CREATE TABLE public.Projects (
+                ID_Projects SERIAL NOT NULL,
+                ID_Customers SERIAL NOT NULL,
+                Project_name VARCHAR NOT NULL,
+                Description VARCHAR NOT NULL,
+                Start_date DATE NOT NULL,
+                End_date VARCHAR,
+                CONSTRAINT id_projects PRIMARY KEY (ID_Projects, ID_Customers)
+);
+
+
+ALTER SEQUENCE public.projects_id_projects_seq OWNED BY public.Projects.ID_Projects;
+
+CREATE SEQUENCE public.contractors_id_contractors_seq;
+
+CREATE TABLE public.Contractors (
+                ID_Contractors SERIAL NOT NULL,
+                Name VARCHAR NOT NULL,
+                Surname VARCHAR NOT NULL,
+                Country_of_residence VARCHAR NOT NULL,
+                Identity_card BIGINT NOT NULL,
+                Operating BOOLEAN NOT NULL,
+                CONSTRAINT id_contractors PRIMARY KEY (ID_Contractors)
+);
+
+
+ALTER SEQUENCE public.contractors_id_contractors_seq OWNED BY public.Contractors.ID_Contractors;
+
+CREATE SEQUENCE public.tasks_id_tasks_seq;
+
+CREATE TABLE public.Tasks (
+                ID_Tasks SERIAL NOT NULL,
+                ID_Projects SERIAL NOT NULL,
+                ID_Customers SERIAL NOT NULL,
+                ID_Contractors SERIAL NOT NULL,
+                Start_date DATE NOT NULL,
+                Duration_time REAL DEFAULT 0 NOT NULL,
+                Completed BOOLEAN NOT NULL,
+                End_date DATE,
+                Tasks_name VARCHAR NOT NULL,
+                Description VARCHAR NOT NULL,
+                CONSTRAINT id_tasks PRIMARY KEY (ID_Tasks, ID_Projects, ID_Customers, ID_Contractors)
+);
+
+
+ALTER SEQUENCE public.tasks_id_tasks_seq OWNED BY public.Tasks.ID_Tasks;
+
+CREATE SEQUENCE public.products_task_id_pr_ta_seq;
+
+CREATE TABLE public.Products_Task (
+                ID_Pr_Ta SERIAL,
+                ID_Products SERIAL NOT NULL,
+                ID_Tasks SERIAL NOT NULL,
+                ID_Projects SERIAL NOT NULL,
+                ID_Customers SERIAL NOT NULL,
+                ID_Contractors SERIAL NOT NULL,
+                CONSTRAINT id_pr_ta PRIMARY KEY (ID_Pr_Ta, ID_Products, ID_Tasks, ID_Projects, ID_Customers, ID_Contractors)
+);
+
+
+ALTER SEQUENCE public.products_task_id_pr_ta_seq OWNED BY public.Products_Task.ID_Pr_Ta;
+
+CREATE SEQUENCE public.categories_tasks_id_ca_ta_seq;
+
+CREATE TABLE public.Categories_Tasks (
+                ID_Ca_Ta SERIAL,
+                ID_Categories SERIAL NOT NULL,
+                ID_Tasks SERIAL NOT NULL,
+                ID_Projects SERIAL NOT NULL,
+                ID_Customers SERIAL NOT NULL,
+                ID_Contractors SERIAL NOT NULL,
+                CONSTRAINT id_ca_ta PRIMARY KEY (ID_Ca_Ta, ID_Categories, ID_Tasks, ID_Projects, ID_Customers, ID_Contractors)
+);
+
+CREATE TABLE Users (
+    ID_Users SERIAL NOT NULL,
+    Name_Users VARCHAR NOT NULL,
+    Email VARCHAR NOT NULL,
+    Password VARCHAR NOT NULL,
+    Token VARCHAR,
+    CONSTRAINT id_users PRIMARY KEY (ID_Users)
+)
+
+
+
+ALTER SEQUENCE public.categories_tasks_id_ca_ta_seq OWNED BY public.Categories_Tasks.ID_Ca_Ta;
+
+ALTER TABLE public.Categories_Tasks ADD CONSTRAINT categories_categories_activities_fk
+FOREIGN KEY (ID_Categories)
+REFERENCES public.Categories (ID_Categories)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE public.Products_Task ADD CONSTRAINT products_products_task_fk
+FOREIGN KEY (ID_Products)
+REFERENCES public.Products (ID_Products)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE public.Projects ADD CONSTRAINT customers_projects_fk
+FOREIGN KEY (ID_Customers)
+REFERENCES public.Customers (ID_Customers)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE public.Tasks ADD CONSTRAINT projects_tasks_fk
+FOREIGN KEY (ID_Projects, ID_Customers)
+REFERENCES public.Projects (ID_Projects, ID_Customers)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE public.Tasks ADD CONSTRAINT contractors_tasks_fk
+FOREIGN KEY (ID_Contractors)
+REFERENCES public.Contractors (ID_Contractors)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE public.Categories_Tasks ADD CONSTRAINT tasks_categories_tasks_fk
+FOREIGN KEY (ID_Tasks, ID_Projects, ID_Customers, ID_Contractors)
+REFERENCES public.Tasks (ID_Tasks, ID_Projects, ID_Customers, ID_Contractors)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE public.Products_Task ADD CONSTRAINT tasks_products_task_fk
+FOREIGN KEY (ID_Tasks, ID_Projects, ID_Customers, ID_Contractors)
+REFERENCES public.Tasks (ID_Tasks, ID_Projects, ID_Customers, ID_Contractors)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE customers ADD constraint ID_card UNIQUE (identity_card)
+
+ALTER TABLE projects ADD constraint project_name UNIQUE (project_name)
+
+ALTER TABLE Tasks ADD column ID_Users SERIAL
+
+ALTER TABLE Tasks ADD constraint fk FOREIGN KEY(Id_Users) REFERENCES users
+
+ALTER TABLE categories_tasks ADD column ID_Users INTEGER
+
+ALTER TABLE categories_tasks ADD constraint fkk FOREIGN KEY(Id_Users) REFERENCES users
+
+ALTER TABLE products_task ADD column ID_Users INTEGER
+
+ALTER TABLE products_task ADD constraint fkk FOREIGN KEY(Id_Users) REFERENCES users
+
+
+insert into users (name_users, email, password) 
+VALUES ('carlos', 'carlos@gmail.com', 'hash2')
+
+INSERT INTO contractors (name, surname, country_of_residence, identity_card, operating) 
+VALUES ('Raul', 'Hernandez', 'Venezuela', 27530213, true),
+('Carlos', 'Hernandez', 'Venezuela', 27530213, false)
+
+INSERT INTO customers (identity_card, "name", surname, city, state, country, sic, operating) 
+VALUES (18756999, 'Marco', 'Fernandez', 'el lago', 'valenciana', 'España', 0111,  true),
+(18756998, 'Marco', 'Fernandez', 'el lago', 'valenciana', 'España', 0111,  true)
+
+INSERT INTO products (description,name_products) VALUES
+(
+	'util para sellar cajas', 'cintas de envalaje' 
+),
+(
+	'perfecto para guardar materiales', 'cajas' 
+)
+
+INSERT INTO categories (description, name_categories) VALUES
+(
+	'Busqueda de desarrollos', 'R&D' 
+),
+(
+	'trabajos administrativos', 'G&A' 
+)
+
+INSERT INTO projects (id_customers, project_name, description, start_date, end_date) 
+VALUES (
+1, 'webapp', 'proyecto_web', '2022/10/15', '2022/10/16'
+),
+(
+2, 'program calculator', 'programa en c', '2022/10/15', '2022/10/16'
+)
+
+INSERT INTO tasks (id_projects, id_customers, id_contractors, start_date, duration_time, completed, end_date, tasks_name, description) 
+VALUES (
+1, 1, 1, '2022/10/15', 4, TRUE, '2022/10/16', 'mejorar la app web', 'mejorar la interfaz de usuario'
+)
+
+INSERT INTO tasks (id_projects, id_customers, id_contractors, start_date, duration_time, completed, tasks_name, description) 
+VALUES
+(
+2, 2, 2, '2022/10/15', 0, false, 'arreglar error en calculator', 'la calculadora no suma'
+)
+
+INSERT INTO products_task (id_products, id_tasks, id_projects, id_customers, id_contractors) 
+VALUES (
+1, 2, 1, 1, 1
+)
+
+INSERT INTO categories_tasks (id_categories, id_tasks, id_projects, id_customers, id_contractors) 
+VALUES (
+1, 2, 1, 1, 1
+)
+

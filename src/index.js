@@ -13,7 +13,7 @@ app.use(require('./routes/routes'))
 const PORT = process.env.PORT || 3000
 
 app.get('/',function(req,res){
-    console.log("hola")
+    console.log("Si ves este mensaje dejame darte las gracias por leer mi codigo! :D")
     res.sendStatus(200);
 })
 
