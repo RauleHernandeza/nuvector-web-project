@@ -6,8 +6,12 @@ const getusers = async (req, res) => {
     login(info).then(resp=>{
         console.log(resp)
         //res.redirect('/home/raul/Escritorio/Node/nuvector_web_project/src/views/board.html')
-        
+
         res.redirect('https://www.youtube.com/')
+        
+    }).catch(err=>{
+      console.log("error "+err)
+      res.send({status:408,body:err});
     })
 
 
