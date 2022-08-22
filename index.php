@@ -1,0 +1,1 @@
+<?php require_once("src/views/index.html") ?>

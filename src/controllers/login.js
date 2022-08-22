@@ -5,9 +5,9 @@ const getusers = async (req, res) => {
     const info = req.body
     login(info).then(resp=>{
         console.log(resp)
-        //res.redirect('/home/raul/Escritorio/Node/nuvector_web_project/src/views/board.html')
+        res.sendFile('/home/raul/Escritorio/Node/nuvector_web_project/src/views/board.html')
 
-        res.redirect('https://www.youtube.com/')
+        //res.redirect('https://www.youtube.com/')
         
     }).catch(err=>{
       console.log("error "+err)
